@@ -1,13 +1,21 @@
 import {combineReducers} from 'redux'
 
-const foo = (state = 0, action) => {
-	return state
+const initUser = {
+	username: '',
+	type: '',
+	msg: '' // 错误提示信息
 }
 
-const bar = (state = 0, action) => {
-	return state
+// 产生user状态的reducer
+const user = (state = initUser, action) => {
+	switch (action.type) {
+	
+		default:
+			return state
+	}
 }
 
 export default combineReducers({
-	foo, bar
+	user
 })
+// 向外暴露的状态的结构 {user: {}}
