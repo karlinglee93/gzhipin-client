@@ -41,5 +41,6 @@
     "babel-plugin-import": "^1.13.0",
     "react-app-rewired": "2.0.2-next.0",
     "redux-devtools-extension": "^2.13.8"
-  }
+  },
+  "proxy": "http://localhost:4001"
 }
