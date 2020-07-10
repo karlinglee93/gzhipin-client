@@ -5,7 +5,8 @@ import {AUTH_SUCCESS, ERR_MSG} from './action-types'
 const initUser = {
 	username: '',
 	type: '',
-	msg: '' // 错误提示信息
+	msg: '', // 错误提示信息
+	redirectTo: '' // 需要自动重定向的路由路径
 }
 
 // 产生user状态的reducer
@@ -13,7 +14,7 @@ const user = (state = initUser, action) => {
 	switch (action.type) {
 		case AUTH_SUCCESS:
 			// 先返回state, 并用action.data将前者覆盖掉
-			return {...state, ...action.data}
+			return {...action.data, redirectTo: '/'}
 		case ERR_MSG:
 			return {...state, msg: action.data}
 		default:

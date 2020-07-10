@@ -7,10 +7,13 @@ import {
 	InputItem, 
 	Button
 } from 'antd-mobile'
+import {connect} from 'react-redux'
+import {Redirect} from 'react-router-dom'
 
 import Logo from '../../components/logo/logo'
+import {login} from '../../redux/actions'
 
-export default class Login extends Component {
+class Login extends Component {
 
 	state = {
 		username: '',
@@ -18,7 +21,7 @@ export default class Login extends Component {
 	}
 
 	handleLogin = () => {
-		console.log(this.state)
+		this.props.login(this.state)
 	}
 
 	handleChange = (name, val) => {
@@ -32,12 +35,18 @@ export default class Login extends Component {
 	}
 
 	render () {
+		const {msg, redirectTo} = this.props.user
+		if (redirectTo) {
+			return <Redirect to={redirectTo}/>
+		}
+
 		return (
 			<div>
 				<NavBar mode='dark'>特&nbsp;聘&nbsp;搬&nbsp;砖&nbsp;工</NavBar>
 				<Logo />
 				<WingBlank size='lg'>
 					<List>
+						{msg ? <p className='err-msg'>{msg}</p> : null}
 						<WhiteSpace size='md' />
 						<InputItem type='text' onChange={val => {this.handleChange('username', val)}} placeholder='请输入用户名'>用户名</InputItem>
 						<WhiteSpace size='md' />
@@ -52,3 +61,8 @@ export default class Login extends Component {
 		)
 	}
 }
+
+export default connect(
+	state => ({user: state.user}),
+	{login}
+)(Login)

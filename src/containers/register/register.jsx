@@ -6,14 +6,18 @@ import {
 	WhiteSpace, 
 	InputItem, 
 	Radio, 
-	Button
+	Button,
+	// Toast
 } from 'antd-mobile'
+import {connect} from 'react-redux'
+import {Redirect} from 'react-router-dom'
 
 import Logo from '../../components/logo/logo'
+import {register} from '../../redux/actions'
 
 const {Item} = List
 
-export default class Register extends Component {
+class Register extends Component {
 
 	state = {
 		username: '',
@@ -23,7 +27,7 @@ export default class Register extends Component {
 	}
 
 	handleRegister = () => {
-		console.log(this.state)
+		this.props.register(this.state)
 	}
 
 	handleChange = (name, val) => {
@@ -38,13 +42,20 @@ export default class Register extends Component {
 
 	render () {
 		const {type} = this.state
+		const {msg, redirectTo} = this.props.user
+		// 如果redirectTo有值, 就需要重定向到指定的路由
+		if (redirectTo) {
+			return <Redirect to={redirectTo}/>
+		}
 
 		return (
 			<div>
+				{/* {msg ? Toast.fail(msg) : null} */}
 				<NavBar mode='dark'>特&nbsp;聘&nbsp;搬&nbsp;砖&nbsp;工</NavBar>
 				<Logo />
 				<WingBlank size='lg'>
 					<List>
+						{msg ? <p className='err-msg'>{msg}</p> : null}
 						<WhiteSpace size='md' />
 						<InputItem type='text' onChange={val => {this.handleChange('username', val)}} placeholder='请输入用户名'>用户名</InputItem>
 						<WhiteSpace size='md' />
@@ -69,3 +80,10 @@ export default class Register extends Component {
 		)
 	}
 }
+
+// 将该UI组件包装生成一个容器组件
+export default connect(
+	// user是来自reducers中的state
+	state => ({user: state.user}),
+	{register}
+)(Register)
