@@ -4,7 +4,7 @@
  */
 import axios from 'axios'
 
-export default ajax = (url='', data={}, type='GET') => {
+const ajax = (url='', data={}, type='GET') => {
 	if (type === 'GET') {
 		let dataStr = ''
 		Object.keys(data).forEach(key => {
@@ -19,3 +19,5 @@ export default ajax = (url='', data={}, type='GET') => {
 		return axios.post(url, data) // data包含请求体数据的对象
 	}
 }
+
+export default ajax
