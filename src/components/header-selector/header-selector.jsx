@@ -4,7 +4,7 @@ import {
 	Grid
 } from 'antd-mobile'
 
-export default class HeadSelector extends Component {
+export default class HeaderSelector extends Component {
 	constructor(props) {
 		super(props)
 		// 准备需要显示的数据
