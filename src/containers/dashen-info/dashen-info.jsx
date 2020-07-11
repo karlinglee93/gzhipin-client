@@ -19,7 +19,7 @@ class DashenInfo extends Component {
 					<InputItem placeholder='请输入求职岗位'>求职岗位: </InputItem>
 					<InputItem placeholder='请输入个人介绍'>个人介绍: </InputItem>
 				</List>
-				<Button>保&nbsp;&nbsp;&nbsp;存</Button>
+				<Button type='primary'>保&nbsp;&nbsp;&nbsp;存</Button>
 			</div>
 		)
 	}
