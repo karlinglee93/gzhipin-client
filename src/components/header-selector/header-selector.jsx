@@ -19,23 +19,23 @@ export default class HeaderSelector extends Component {
 	}
 
 	state = {
-		header: {} // 图片对象
+		icon: null // 图片对象
 	}
 
-	handleClick = (el) => {
+	handleClick = ({icon, text}) => {
 		this.setState({
-			header: el
+			icon
 		})
-		this.props.setHeader(el.text)
+		this.props.setHeader(text)
 	}
 
 	render() {
-		const {header} = this.state
-		const listHeader = !header
+		const {icon} = this.state
+		const listHeader = !icon
 			? '请选择头像' 
 			: (
 				<div>
-					已选择头像<img src={header.icon} alt={header.text}/>
+					已选择头像<img src={icon} alt='header'/>
 				</div>
 			)
 
