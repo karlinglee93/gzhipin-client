@@ -3,6 +3,7 @@ import {
 	List,
 	Grid
 } from 'antd-mobile'
+import PropTypes from 'prop-types'
 
 export default class HeaderSelector extends Component {
 	constructor(props) {
@@ -17,16 +18,41 @@ export default class HeaderSelector extends Component {
 		}
 	}
 
+	state = {
+		header: {} // 图片对象
+	}
+
+	handleClick = (el) => {
+		this.setState({
+			header: el
+		})
+		this.props.setHeader(el.text)
+	}
+
 	render() {
+		const {header} = this.state
+		const listHeader = !header
+			? '请选择头像' 
+			: (
+				<div>
+					已选择头像<img src={header.icon} alt={header.text}/>
+				</div>
+			)
+
 		return (
 			<div>
-				<List renderHeader={() => '请选择头像'}>
+				<List renderHeader={() => listHeader}>
 					<Grid 
 						data={this.headers}
 						columnNum={5}
+						onClick={this.handleClick}
 					/>
 				</List>
 			</div>
 		)
+	}
+
+	static propTypes = {
+		setHeader: PropTypes.func.isRequired
 	}
 }
