@@ -7,6 +7,8 @@ import {
 	TextareaItem,
 	Button
 } from 'antd-mobile'
+import {updateUser} from '../../redux/actions'
+import {Redirect} from 'react-router-dom'
 
 import HeaderSelector from '../../components/header-selector/header-selector'
 
@@ -31,10 +33,15 @@ class DashenInfo extends Component {
 	}
 
 	handleSave = () => {
-		console.log(this.state)
+		this.props.updateUser(this.state)
 	}
 
 	render () {
+		const {user} = this.props
+		if (user.header) {
+			return <Redirect to={'/dashen'}/>
+		}
+
 		return (
 			<div>
 				<NavBar>搬砖工信息完善</NavBar>
@@ -55,6 +62,6 @@ class DashenInfo extends Component {
 }
 
 export default connect(
-	state => ({}),
-	{}
+	state => ({user: state.user}),
+	{updateUser}
 )(DashenInfo)
