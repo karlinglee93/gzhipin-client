@@ -10,3 +10,5 @@ export const reqRegister = user => ajax('/register', user, 'POST')
 export const reqLogin = user => ajax('/login', user, 'POST')
 // update interface
 export const reqUpdate = user => ajax('/update', user, 'POST')
+// get user info
+export const reqUser = () => ajax('/user')

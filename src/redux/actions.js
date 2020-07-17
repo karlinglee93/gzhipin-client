@@ -1,7 +1,8 @@
 import {
 	reqRegister, 
 	reqLogin,
-	reqUpdate
+	reqUpdate,
+	reqUser
 } from '../api/index'
 import {
 	AUTH_SUCCESS, 
@@ -69,6 +70,19 @@ export const login = (user) => {
 export const updateUser = (user) => {
 	return async dispatch => {
 		const response = await reqUpdate(user)
+		const result = response.data
+		if (result.code === 0) {
+			dispatch(receiveUser(result.data))
+		} else {
+			dispatch(resetUser(result.msg))
+		}
+	}
+}
+
+// Get user info
+export const getUser = () => {
+	return async dispatch => {
+		const response = await reqUser()
 		const result = response.data
 		if (result.code === 0) {
 			dispatch(receiveUser(result.data))

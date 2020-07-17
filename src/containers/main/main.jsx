@@ -6,6 +6,7 @@ import Cookie from 'js-cookie'
 import DashenInfo from '../dashen-info/dashen-info'
 import LaobanInfo from '../laoban-info/laoban-info'
 import {getRedirectTo} from '../../utils/index'
+import {getUser} from '../../redux/actions'
 
 class Main extends Component {
 
@@ -14,7 +15,7 @@ class Main extends Component {
 		const {user} = this.props
 		if (user_id && !user._id) {
 			// 发送异步请求获取user
-			console.log('发送ajax请求获取user')
+			this.props.getUser()
 		}
 	}
 
@@ -53,6 +54,7 @@ class Main extends Component {
 
 export default connect(
 	state => ({user: state.user}),
+	{getUser}
 )(Main)
 
 /** 
