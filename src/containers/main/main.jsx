@@ -2,13 +2,52 @@ import React, {Component} from 'react'
 import {Switch, Route, Redirect} from 'react-router-dom'
 import {connect} from 'react-redux'
 import Cookie from 'js-cookie'
+import {NavBar} from 'antd-mobile'
 
 import DashenInfo from '../dashen-info/dashen-info'
 import LaobanInfo from '../laoban-info/laoban-info'
 import {getRedirectTo} from '../../utils/index'
 import {getUser} from '../../redux/actions'
+import Laoban from '../laoban/laoban'
+import Dashen from '../dashen/dashen'
+import Message from '../message/message'
+import Personal from '../personal/personal'
+import NotFound from '../../components/not-found/not-found'
 
 class Main extends Component {
+
+	// 组件类和组件对象
+	// 给组件对象添加属性 
+	navList = [
+		{
+			path: '/laoban', // 路由路径 
+			component: Laoban,
+			title: '大神列表',
+			icon: 'dashen',
+			text: '大神'
+		}, 
+		{
+			path: '/dashen',
+			component: Dashen,
+			title: '老板列表',
+			icon: 'laoban',
+			text: '老板'
+		},
+		{
+			path: '/message',
+			component: Message,
+			title: '消息列表',
+			icon: 'message',
+			text: '消息'
+		}, 
+		{
+			path: '/personal',
+			component: Personal,
+			title: '用户中心',
+			icon: 'personal',
+			text: '个人'
+		}
+	]
 
 	componentDidMount () {
 		const user_id = Cookie.get('user_id')
@@ -41,12 +80,22 @@ class Main extends Component {
 			}
 		}
 
+		const {navList} = this
+		const path = this.props.location.pathname
+		const curNav = navList.find(nav => path === nav.path)
+
 		return (
 			<div>
+				{curNav ? <NavBar>{curNav.title}</NavBar> : null}
 				<Switch>
 					<Route path='/dasheninfo' component={DashenInfo} />
 					<Route path='/laobaninfo' component={LaobanInfo} />
+					{
+						this.navList.map(nav => <Route path={nav.path} component={nav.component} />)
+					}
+					<Route component={NotFound} />
 				</Switch>
+				{curNav ? <div>{curNav.text}</div> : null}
 			</div>
 		)
 	}
