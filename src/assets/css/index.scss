@@ -6,8 +6,14 @@
 	}
 }
 
-.err-msg {
+.err-msg { // error message
 	color: red; 
 	text-align: center; 
 	font-size: 18px;
+}
+
+.am-tab-bar { // footer
+	position: fixed;
+    bottom: 0;
+    width: 100%;
 }

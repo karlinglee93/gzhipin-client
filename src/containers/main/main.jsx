@@ -81,9 +81,17 @@ class Main extends Component {
 			}
 		}
 
-		const {navList} = this
+		let {navList} = this
 		const path = this.props.location.pathname
 		const curNav = navList.find(nav => path === nav.path)
+		if (curNav) {
+			if (user.type === 'dashen') {
+				navList[0].hidden = true
+			} else if (user.type === 'laoban') {
+				navList[1].hidden = true
+			}
+			navList = navList.filter(nav => !nav.hidden)
+		}
 
 		return (
 			<div>
