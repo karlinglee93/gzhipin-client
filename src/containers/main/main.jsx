@@ -13,6 +13,7 @@ import Dashen from '../dashen/dashen'
 import Message from '../message/message'
 import Personal from '../personal/personal'
 import NotFound from '../../components/not-found/not-found'
+import NavFooter from '../../components/nav-footer/nav-footer'
 
 class Main extends Component {
 
@@ -95,7 +96,7 @@ class Main extends Component {
 					}
 					<Route component={NotFound} />
 				</Switch>
-				{curNav ? <div>{curNav.text}</div> : null}
+				{curNav ? <NavFooter navList={navList} /> : null}
 			</div>
 		)
 	}
