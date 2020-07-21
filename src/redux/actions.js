@@ -18,7 +18,7 @@ const errMsg = (msg) => ({type: ERR_MSG, data: msg})
 // Receive user - sync action
 const receiveUser = (user) => ({type: RECEIVE_USER, data: user})
 // Reset user - sync action
-const resetUser = (msg) => ({type: RESET_USER, data: msg})
+export const resetUser = (msg) => ({type: RESET_USER, data: msg})
 
 // 注册异步action
 export const register = (user) => {

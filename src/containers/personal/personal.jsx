@@ -1,11 +1,29 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import {Result, List, WhiteSpace, Button} from 'antd-mobile'
+import {Result, List, WhiteSpace, Button, Modal} from 'antd-mobile'
+import Cookie from 'js-cookie'
+
+import {resetUser} from '../../redux/actions'
 
 const Item = List.Item
 const Brief = Item.Brief
 
 export class Personal extends Component {
+
+	logout = () => {
+		Modal.alert('退出', '确定退出登录吗?', [
+			{text: '取消'},
+			{
+				text: '确定',
+				onPress: () => {
+					// 清除cookie中的user_id
+					Cookie.remove('user_id')
+					// 初始化redux中的user
+					this.props.resetUser()
+				}
+			}
+		])
+	}
 
 	render() {
 		const {username, header, post, info, company, salary} = this.props.user
@@ -25,7 +43,7 @@ export class Personal extends Component {
 					</Item>
 				</List>
 				<WhiteSpace />
-				<Button type='warning'>退出登录</Button>
+				<Button type='warning' onClick={this.logout}>退出登录</Button>
 			</div>
 		)
 	}
@@ -36,7 +54,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = {
-	
+	resetUser
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Personal)
