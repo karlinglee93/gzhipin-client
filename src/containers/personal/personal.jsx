@@ -22,7 +22,6 @@ export class Personal extends Component {
 						<Brief>{`职位: ${post}`}</Brief>
 						<Brief>{`简介: ${info}`}</Brief>
 						{salary ? <Brief>{`薪资: ${salary}`}</Brief> : null}
-						
 					</Item>
 				</List>
 				<WhiteSpace />

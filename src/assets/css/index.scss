@@ -15,5 +15,6 @@
 .am-tab-bar { // footer
 	position: fixed;
     bottom: 0;
-    width: 100%;
+	width: 100%;
+	height: inherit; // 包裹内容
 }
