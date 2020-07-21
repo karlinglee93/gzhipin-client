@@ -17,4 +17,12 @@
     bottom: 0;
 	width: 100%;
 	height: inherit; // 包裹内容
+	z-index: 10;
+}
+
+.stick-top {
+	position: fixed;
+    top: 0;
+	width: 100%;
+	z-index: 10;
 }
