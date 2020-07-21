@@ -6,19 +6,23 @@ const Item = List.Item
 const Brief = Item.Brief
 
 export class Personal extends Component {
+
 	render() {
+		const {username, header, post, info, company, salary} = this.props.user
+
 		return (
 			<div>
 				<Result 
-					img={<img src={require(`../../assets/images/headers/头像1.png`)} style={{width: 50}} alt='header' />}
-					title='Username'
-					message='Company'
+					img={<img src={require(`../../assets/images/headers/${header}.png`)} style={{width: 50}} alt='header' />}
+					title={username}
+					message={company}
 				/>
 				<List renderHeader={() => '相关信息'}>
 					<Item multipleLine>
-						<Brief>职位: post</Brief>
-						<Brief>简介: info</Brief>
-						<Brief>薪资: salary</Brief>
+						<Brief>{`职位: ${post}`}</Brief>
+						<Brief>{`简介: ${info}`}</Brief>
+						{salary ? <Brief>{`薪资: ${salary}`}</Brief> : null}
+						
 					</Item>
 				</List>
 				<WhiteSpace />
@@ -29,7 +33,7 @@ export class Personal extends Component {
 }
 
 const mapStateToProps = (state) => ({
-	
+	user: state.user
 })
 
 const mapDispatchToProps = {
