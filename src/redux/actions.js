@@ -108,3 +108,9 @@ export const getUserlist = (type) => {
 		}
 	}
 }
+
+export const sendMsg = (from, to, content) => {
+	return dispatch => {
+		console.log(from, to, content.trim())
+	}
+}

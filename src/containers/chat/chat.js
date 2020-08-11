@@ -1,10 +1,28 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {NavBar, List, InputItem} from 'antd-mobile'
+import {sendMsg} from '../../redux/actions'
 
 const Item = List.Item
 
 export class Chat extends Component {
+
+	state = {
+		content: ''
+	}
+
+	handleClick = () => {
+		const from = this.props.user._id
+		const to = this.props.match.params.user_id
+		const {content} = this.state
+		if (content.trim()) {
+			this.props.sendMsg(from, to, content)
+		}
+		this.setState({
+			content: ''
+		})
+	}
+
 	render() {
 		return (
 			<div id='chat-page'>
@@ -37,6 +55,9 @@ export class Chat extends Component {
 					<InputItem 
 						placeholder='请输入'
 						extra={<span>发送</span>}
+						onExtraClick={this.handleClick}
+						value={this.state.content}
+						onChange={val => this.setState({content: val})}
 					/>
 				</div>
 				
@@ -46,11 +67,11 @@ export class Chat extends Component {
 }
 
 const mapStateToProps = (state) => ({
-	
+	user: state.user
 })
 
 const mapDispatchToProps = {
-	
+	sendMsg
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Chat)

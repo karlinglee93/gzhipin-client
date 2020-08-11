@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {WhiteSpace, WingBlank, Card} from 'antd-mobile'
+import {withRouter} from 'react-router-dom'
 
 const {Header, Body} = Card
 
