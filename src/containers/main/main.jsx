@@ -14,6 +14,7 @@ import Message from '../message/message'
 import Personal from '../personal/personal'
 import NotFound from '../../components/not-found/not-found'
 import NavFooter from '../../components/nav-footer/nav-footer'
+import Chat from '../../containers/chat/chat'
 
 class Main extends Component {
 
@@ -102,6 +103,7 @@ class Main extends Component {
 					{
 						this.navList.map(nav => <Route path={nav.path} component={nav.component} />)
 					}
+					<Route path='/chat/:user_id' component={Chat} />
 					<Route component={NotFound} />
 				</Switch>
 				{curNav ? <NavFooter navList={navList} /> : null}

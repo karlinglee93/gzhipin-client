@@ -4,7 +4,7 @@ import {WhiteSpace, WingBlank, Card} from 'antd-mobile'
 
 const {Header, Body} = Card
 
-export default class Userlist extends Component {
+class Userlist extends Component {
 	static propTypes = {
 		userlist: PropTypes.array.isRequired
 	}
@@ -18,7 +18,7 @@ export default class Userlist extends Component {
 				userlist.filter(user => (user.header)).map(user => (
 					<div key={user._id}>
 						<WhiteSpace />
-						<Card>
+						<Card onClick={() => this.props.history.push(`/chat/${user._id}`)}>
 							<Header
 								thumb={require(`../../assets/images/headers/${user.header}.png`)}
 								extra={user.username}
@@ -38,3 +38,5 @@ export default class Userlist extends Component {
 		)
 	}
 }
+
+export default withRouter(Userlist)
