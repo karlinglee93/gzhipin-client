@@ -1,3 +1,5 @@
+import io from 'socket.io-client'
+
 import {
 	reqRegister, 
 	reqLogin,
@@ -12,6 +14,20 @@ import {
 	RESET_USER,
 	RECEIVE_USER_LIST
 } from './action-types'
+
+function initIO () {
+	/**
+	 * 单例模式
+	 * 1) 实例保存在全局变量中
+	 * 2) 实例保存在对象中
+	 */
+	if (!io.socket) {
+		io.socket = io('ws://localhost:4001')
+		io.socket.on('receiveMsg', data => {
+			console.log('客户端接收到消息: ', data)
+		})
+	}
+}
 
 // 授权成功的同步action
 const authSuccess = (user) => ({type: AUTH_SUCCESS, data: user})
@@ -110,7 +126,11 @@ export const getUserlist = (type) => {
 }
 
 export const sendMsg = (from, to, content) => {
+	initIO()
+
 	return dispatch => {
-		console.log(from, to, content.trim())
+		// 发给所有人, 有待优化
+		io.emit('sendMsg', {from, to, content})
+		console.log('客户端发送消息: ' + {from, to, content})
 	}
 }
