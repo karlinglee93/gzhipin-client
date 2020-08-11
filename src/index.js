@@ -9,7 +9,7 @@ import Main from './containers/main/main'
 import store from './redux/store'
 import './assets/css/index.scss'
 
-import './test/socketio_test'
+// import './test/socketio_test'
 
 ReactDOM.render((
 	<Provider store={store}>

@@ -16,7 +16,7 @@ export class Chat extends Component {
 		const to = this.props.match.params.user_id
 		const {content} = this.state
 		if (content.trim()) {
-			this.props.sendMsg(from, to, content)
+			this.props.sendMsg({from, to, content})
 		}
 		this.setState({
 			content: ''

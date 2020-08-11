@@ -17,14 +17,14 @@ import {
 
 function initIO () {
 	/**
-	 * 单例模式
-	 * 1) 实例保存在全局变量中
-	 * 2) 实例保存在对象中
+	 * 单例对象
+	 * 1) 创建对象之前: 判断对象是否存在, 只有不存在时才进行创建
+	 * 2) 创建对象之后: 保存对象 1) 实例保存在全局变量中 2) 实例保存在某一个对象中
 	 */
 	if (!io.socket) {
 		io.socket = io('ws://localhost:4001')
-		io.socket.on('receiveMsg', data => {
-			console.log('客户端接收到消息: ', data)
+		io.socket.on('receiveMsg', chatMsg => {
+			console.log('客户端接收消息: ', chatMsg)
 		})
 	}
 }
@@ -125,12 +125,11 @@ export const getUserlist = (type) => {
 	}
 }
 
-export const sendMsg = (from, to, content) => {
-	initIO()
-
+export const sendMsg = ({from, to, content}) => {
 	return dispatch => {
-		// 发给所有人, 有待优化
-		io.emit('sendMsg', {from, to, content})
-		console.log('客户端发送消息: ' + {from, to, content})
+		// initIO() 初始化时机不对, 需要优化
+		initIO()
+		io.socket.emit('sendMsg', {from, to, content})
+		console.log('客户端发送消息: ', {from, to, content})
 	}
 }
