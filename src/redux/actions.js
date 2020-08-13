@@ -33,18 +33,6 @@ const initIO = () => {
 	}
 }
 
-const getMsgList = async (dispatch) => {
-	initIO()
-	
-	const response = await reqMsgList()
-	const result = response.data
-	
-	if (result.code === 0) {
-		const {users, chatMsgs} = result.data
-		dispatch((users, chatMsgs) => ({type: RECEIVE_MSG_LIST, data: {users, chatMsgs}}))
-	}
-}
-
 // 授权成功的同步action
 const authSuccess = (user) => ({type: AUTH_SUCCESS, data: user})
 // 错误提示信息的同步action
@@ -55,6 +43,19 @@ const receiveUser = (user) => ({type: RECEIVE_USER, data: user})
 export const resetUser = (msg) => ({type: RESET_USER, data: msg})
 // Receive user list - sync action
 const receiveUserlist = (userlist) => ({type: RECEIVE_USER_LIST, data: userlist})
+const receiveMsgList = ({users, chatMsgs}) => ({type: RECEIVE_MSG_LIST, data: {users, chatMsgs}})
+
+const getMsgList = async (dispatch) => {
+	initIO()
+
+	const response = await reqMsgList()
+	const result = response.data
+	
+	if (result.code === 0) {
+		const {users, chatMsgs} = result.data
+		dispatch(receiveMsgList({users, chatMsgs}))
+	}
+}
 
 // 注册异步action
 export const register = (user) => {
@@ -77,7 +78,7 @@ export const register = (user) => {
 		const response = await reqRegister({username, password, type})
 		const result = response.data
 		if (result.code === 0) {
-			getMsgList()
+			getMsgList(dispatch)
 			dispatch(authSuccess(result.data))
 		} else {
 			dispatch(errMsg(result.msg))
@@ -96,7 +97,7 @@ export const login = (user) => {
 		const response = await reqLogin(user)
 		const result = response.data
 		if (result.code === 0) {
-			getMsgList()
+			getMsgList(dispatch)
 			dispatch(authSuccess(result.data))
 		} else {
 			dispatch(errMsg(result.msg))
@@ -110,7 +111,6 @@ export const updateUser = (user) => {
 		const response = await reqUpdate(user)
 		const result = response.data
 		if (result.code === 0) {
-			getMsgList()
 			dispatch(receiveUser(result.data))
 		} else {
 			dispatch(resetUser(result.msg))
@@ -124,6 +124,7 @@ export const getUser = () => {
 		const response = await reqUser()
 		const result = response.data
 		if (result.code === 0) {
+			getMsgList(dispatch)
 			dispatch(receiveUser(result.data))
 		} else {
 			dispatch(resetUser(result.msg))

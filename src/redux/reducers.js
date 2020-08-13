@@ -53,11 +53,14 @@ const initMsgList = {
 const msglist = (state=initMsgList, action) => {
 	switch (action.type) {
 		case RECEIVE_MSG_LIST:
+			const {users, chatMsgs} = action.data
 			return {
-				users: action.data.users,
-				chatMsgs: action.data.chatMsgs,
+				users,
+				chatMsgs,
 				unreadMsgCount: 0
 			}
+		case RECEIVE_MSG:
+			return
 		default:
 			return state
 	}
@@ -66,4 +69,4 @@ const msglist = (state=initMsgList, action) => {
 export default combineReducers({
 	user, userlist, msglist
 })
-// 向外暴露的状态的结构 {user: {}, userlist: []} 
+// 向外暴露的状态的结构 {user: {}, userlist: [], msglist: {}} 
