@@ -5,17 +5,21 @@ import {
 	reqLogin,
 	reqUpdate,
 	reqUser,
-	reqUserlist
+	reqUserList,
+	reqMsgList,
+	reqReadMsg
 } from '../api/index'
 import {
 	AUTH_SUCCESS, 
 	ERR_MSG,
 	RECEIVE_USER,
 	RESET_USER,
-	RECEIVE_USER_LIST
+	RECEIVE_USER_LIST,
+	RECEIVE_MSG_LIST,
+	RECEIVE_MSG
 } from './action-types'
 
-function initIO () {
+const initIO = () => {
 	/**
 	 * 单例对象
 	 * 1) 创建对象之前: 判断对象是否存在, 只有不存在时才进行创建
@@ -26,6 +30,18 @@ function initIO () {
 		io.socket.on('receiveMsg', chatMsg => {
 			console.log('客户端接收消息: ', chatMsg)
 		})
+	}
+}
+
+const getMsgList = async (dispatch) => {
+	initIO()
+	
+	const response = await reqMsgList()
+	const result = response.data
+	
+	if (result.code === 0) {
+		const {users, chatMsgs} = result.data
+		dispatch((users, chatMsgs) => ({type: RECEIVE_MSG_LIST, data: {users, chatMsgs}}))
 	}
 }
 
@@ -61,6 +77,7 @@ export const register = (user) => {
 		const response = await reqRegister({username, password, type})
 		const result = response.data
 		if (result.code === 0) {
+			getMsgList()
 			dispatch(authSuccess(result.data))
 		} else {
 			dispatch(errMsg(result.msg))
@@ -79,6 +96,7 @@ export const login = (user) => {
 		const response = await reqLogin(user)
 		const result = response.data
 		if (result.code === 0) {
+			getMsgList()
 			dispatch(authSuccess(result.data))
 		} else {
 			dispatch(errMsg(result.msg))
@@ -92,6 +110,7 @@ export const updateUser = (user) => {
 		const response = await reqUpdate(user)
 		const result = response.data
 		if (result.code === 0) {
+			getMsgList()
 			dispatch(receiveUser(result.data))
 		} else {
 			dispatch(resetUser(result.msg))
@@ -116,7 +135,7 @@ export const getUser = () => {
 export const getUserlist = (type) => {
 	return async dispatch => {
 		// 执行异步ajax请求
-		const response = await reqUserlist(type)
+		const response = await reqUserList(type)
 		const result = response.data
 		// 得到结果, 分发一个同步action
 		if (result.code === 0) {
@@ -127,8 +146,6 @@ export const getUserlist = (type) => {
 
 export const sendMsg = ({from, to, content}) => {
 	return dispatch => {
-		// initIO() 初始化时机不对, 需要优化
-		initIO()
 		io.socket.emit('sendMsg', {from, to, content})
 		console.log('客户端发送消息: ', {from, to, content})
 	}
