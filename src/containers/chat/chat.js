@@ -24,32 +24,44 @@ export class Chat extends Component {
 	}
 
 	render() {
+		const {users, chatMsgs} = this.props.msglist
+		const myId = this.props.user._id
+		if (!users[myId]) {
+			return null	
+		}
+		const targetId = this.props.match.params.user_id
+		const currentId = [myId, targetId].sort().join('_')
+		const currentChatMsgs = chatMsgs.filter(chatMsg => chatMsg.chat_id === currentId)
+		const targetHeader = require(`../../assets/images/headers/${users[targetId].header}.png`)
+
 		return (
 			<div id='chat-page'>
 				<NavBar>name</NavBar>
 				<List>
-					<Item
-						thumb={require('../../assets/images/headers/头像1.png')}
-					>
-						hi
-					</Item>
-					<Item
-						thumb={require('../../assets/images/headers/头像1.png')}
-					>
-						how are you?
-					</Item>
-					<Item
-						className='chat-me'
-						extra='我'
-					>
-						hello
-					</Item>
-					<Item
-						className='chat-me'
-						extra='我'
-					>
-						I'm fine
-					</Item>
+					{
+						currentChatMsgs.map(currentChatMsg => {
+							if (targetId === currentChatMsg.from) {
+								return (
+									<Item
+										key={currentChatMsg._id}
+										thumb={targetHeader}
+									>
+										{currentChatMsg.content}
+									</Item>
+								)
+							} else {
+								return (
+									<Item
+										key={currentChatMsg._id}
+										className='chat-me'
+										extra='我'
+									>
+										{currentChatMsg.content}
+									</Item>
+								) 
+							}
+						})
+					}
 				</List>
 				<div className='am-tab-bar'>
 					<InputItem 
@@ -67,7 +79,8 @@ export class Chat extends Component {
 }
 
 const mapStateToProps = (state) => ({
-	user: state.user
+	user: state.user,
+	msglist: state.msglist
 })
 
 const mapDispatchToProps = {
