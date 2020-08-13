@@ -24,15 +24,17 @@ export class Chat extends Component {
 	}
 
 	render() {
+		const {user} = this.props
 		const {users, chatMsgs} = this.props.msglist
-		const myId = this.props.user._id
+		const myId = user._id
 		if (!users[myId]) {
 			return null	
 		}
 		const targetId = this.props.match.params.user_id
 		const currentId = [myId, targetId].sort().join('_')
 		const currentChatMsgs = chatMsgs.filter(chatMsg => chatMsg.chat_id === currentId)
-		const targetHeader = require(`../../assets/images/headers/${users[targetId].header}.png`)
+		const targetHeader = users[targetId].header
+		const targetIcon = targetHeader ? require(`../../assets/images/headers/${targetHeader}.png`) : null
 
 		return (
 			<div id='chat-page'>
@@ -44,7 +46,7 @@ export class Chat extends Component {
 								return (
 									<Item
 										key={currentChatMsg._id}
-										thumb={targetHeader}
+										thumb={targetIcon}
 									>
 										{currentChatMsg.content}
 									</Item>
