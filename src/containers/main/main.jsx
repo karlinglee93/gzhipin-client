@@ -101,7 +101,7 @@ class Main extends Component {
 					<Route path='/dasheninfo' component={DashenInfo} />
 					<Route path='/laobaninfo' component={LaobanInfo} />
 					{
-						this.navList.map(nav => <Route path={nav.path} component={nav.component} />)
+						this.navList.map(nav => <Route key={nav.path} path={nav.path} component={nav.component} />)
 					}
 					<Route path='/chat/:user_id' component={Chat} />
 					<Route component={NotFound} />
