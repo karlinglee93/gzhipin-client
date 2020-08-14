@@ -35,18 +35,13 @@ export class Chat extends Component {
 		})
 	}
 
-	handleEmojiClick = (e) => {
-		this.setState({
-			content: this.state.content + e.text
-		})
-	}
-
 	handleToggleEmojis = () => {
-		const {isShowEmojis} = this.state
+		const isShowEmojis = !this.state.isShowEmojis
 		this.setState({
-			isShowEmojis: !isShowEmojis
+			isShowEmojis: isShowEmojis
 		})
-		if (!isShowEmojis) {
+		if (isShowEmojis) {
+			// 异步手动派发resize事件, 解决表情列表显示的bug
 			setTimeout(() => {
 				window.dispatchEvent(new Event('resize'))
 			}, 0)
@@ -119,7 +114,7 @@ export class Chat extends Component {
 						this.state.isShowEmojis ? (
 							<Grid
 								data={this.emojis}
-								onClick={this.handleEmojiClick}
+								onClick={item => this.setState({content: this.state.content + item.text})}
 								columnNum={8}
 								isCarousel={true}
 								carouselMaxRow={4}
