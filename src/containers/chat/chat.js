@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import {NavBar, List, InputItem, Grid} from 'antd-mobile'
+import {NavBar, List, InputItem, Grid, Icon} from 'antd-mobile'
 import {sendMsg} from '../../redux/actions'
 
 const Item = List.Item
@@ -20,6 +20,10 @@ export class Chat extends Component {
 			'😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣', '🤣','😀'
 		]
 		this.emojis = emojis.map(e => ({text: e}))
+	}
+
+	componentDidUpdate() {
+
 	}
 
 	handleClick = () => {
@@ -63,8 +67,14 @@ export class Chat extends Component {
 
 		return (
 			<div id='chat-page'>
-				<NavBar>name</NavBar>
-				<List>
+				<NavBar 
+					className='stick-top'
+					icon={<Icon type='left' />}
+					onLeftClick={() => this.props.history.goBack()}
+				>
+					{users[targetId].username}
+				</NavBar>
+				<List style={{marginTop: 45, marginBottom: 50}}>
 					{
 						currentChatMsgs.map(currentChatMsg => {
 							if (targetId === currentChatMsg.from) {
