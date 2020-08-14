@@ -46,6 +46,11 @@ export class Chat extends Component {
 		this.setState({
 			isShowEmojis: !isShowEmojis
 		})
+		if (!isShowEmojis) {
+			setTimeout(() => {
+				window.dispatchEvent(new Event('resize'))
+			}, 0)
+		}
 	}
 
 	render() {
