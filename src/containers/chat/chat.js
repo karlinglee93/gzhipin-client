@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import {NavBar, List, InputItem} from 'antd-mobile'
+import {NavBar, List, InputItem, Grid} from 'antd-mobile'
 import {sendMsg} from '../../redux/actions'
 
 const Item = List.Item
@@ -8,7 +8,18 @@ const Item = List.Item
 export class Chat extends Component {
 
 	state = {
-		content: ''
+		content: '',
+		isShowEmojis: false
+	}
+
+	componentWillMount() {
+		const emojis = [
+			'😀', '😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣','😀',
+			'😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣', '🤣','😀',
+			'😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣', '🤣','😀',
+			'😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣', '🤣','😀'
+		]
+		this.emojis = emojis.map(e => ({text: e}))
 	}
 
 	handleClick = () => {
@@ -19,7 +30,21 @@ export class Chat extends Component {
 			this.props.sendMsg({from, to, content})
 		}
 		this.setState({
-			content: ''
+			content: '',
+			isShowEmojis: false
+		})
+	}
+
+	handleEmojiClick = (e) => {
+		this.setState({
+			content: this.state.content + e.text
+		})
+	}
+
+	handleToggleEmojis = () => {
+		const {isShowEmojis} = this.state
+		this.setState({
+			isShowEmojis: !isShowEmojis
 		})
 	}
 
@@ -68,13 +93,35 @@ export class Chat extends Component {
 				<div className='am-tab-bar'>
 					<InputItem 
 						placeholder='请输入'
-						extra={<span>发送</span>}
-						onExtraClick={this.handleClick}
+						extra={
+							<React.Fragment>
+								<span 
+									role="img" 
+									aria-label="emoji-lists" 
+									style={{marginRight: '5px'}}
+									onClick={this.handleToggleEmojis}
+								>
+									😊
+								</span>
+								<span onClick={this.handleClick}>发送</span>
+							</React.Fragment>
+						}
 						value={this.state.content}
 						onChange={val => this.setState({content: val})}
+						onFocus={() => this.setState({isShowEmojis: false})}
 					/>
+					{
+						this.state.isShowEmojis ? (
+							<Grid
+								data={this.emojis}
+								onClick={this.handleEmojiClick}
+								columnNum={8}
+								isCarousel={true}
+								carouselMaxRow={4}
+							/>
+						) : null
+					}
 				</div>
-				
 			</div>
 		)
 	}
