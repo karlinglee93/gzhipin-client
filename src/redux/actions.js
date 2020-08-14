@@ -7,7 +7,7 @@ import {
 	reqUser,
 	reqUserList,
 	reqMsgList,
-	reqReadMsg
+	// reqReadMsg
 } from '../api/index'
 import {
 	AUTH_SUCCESS, 

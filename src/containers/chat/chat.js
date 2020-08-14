@@ -23,12 +23,10 @@ export class Chat extends Component {
 	}
 
 	componentDidMount() {
-		console.log(document.body.scrollHeight)
 		window.scrollTo(0, document.body.scrollHeight)
 	}
 
 	componentDidUpdate() {
-		console.log(document.body.scrollHeight)
 		window.scrollTo(0, document.body.scrollHeight)
 	}
 
