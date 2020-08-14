@@ -47,13 +47,12 @@ export const resetUser = (msg) => ({type: RESET_USER, data: msg})
 // Receive user list - sync action
 const receiveUserlist = (userlist) => ({type: RECEIVE_USER_LIST, data: userlist})
 const receiveMsgList = ({users, chatMsgs}) => ({type: RECEIVE_MSG_LIST, data: {users, chatMsgs}})
-const receiveMsg = (chatMsg) => ({type: RECEIVE_MSG, data: {chatMsg}})
+const receiveMsg = (chatMsg) => ({type: RECEIVE_MSG, data: chatMsg})
 
 const getMsgList = async (dispatch, user_id) => {
 	initIO(dispatch, user_id)
 
 	const response = await reqMsgList()
-	debugger
 	const result = response.data
 	
 	if (result.code === 0) {
@@ -83,7 +82,7 @@ export const register = (user) => {
 		const response = await reqRegister({username, password, type})
 		const result = response.data
 		if (result.code === 0) {
-			getMsgList(dispatch, user._id)
+			getMsgList(dispatch, result.data._id)
 			dispatch(authSuccess(result.data))
 		} else {
 			dispatch(errMsg(result.msg))
@@ -102,7 +101,7 @@ export const login = (user) => {
 		const response = await reqLogin(user)
 		const result = response.data
 		if (result.code === 0) {
-			getMsgList(dispatch, user._id)
+			getMsgList(dispatch, result.data._id)
 			dispatch(authSuccess(result.data))
 		} else {
 			dispatch(errMsg(result.msg))
