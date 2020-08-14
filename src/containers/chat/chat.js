@@ -22,8 +22,14 @@ export class Chat extends Component {
 		this.emojis = emojis.map(e => ({text: e}))
 	}
 
-	componentDidUpdate() {
+	componentDidMount() {
+		console.log(document.body.scrollHeight)
+		window.scrollTo(0, document.body.scrollHeight)
+	}
 
+	componentDidUpdate() {
+		console.log(document.body.scrollHeight)
+		window.scrollTo(0, document.body.scrollHeight)
 	}
 
 	handleClick = () => {
