@@ -60,7 +60,12 @@ const msglist = (state=initMsgList, action) => {
 				unreadMsgCount: 0
 			}
 		case RECEIVE_MSG:
-			return
+			const chatMsg = action.data
+			return {
+				users: state.users,
+				chatMsgs: [...state.chatMsgs, chatMsg],
+				unreadMsgCount: 0
+			}
 		default:
 			return state
 	}

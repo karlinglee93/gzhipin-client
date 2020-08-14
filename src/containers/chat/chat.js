@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import {NavBar, List, InputItem} from 'antd-mobile'
+import {NavBar, List, InputItem, Grid, Icon} from 'antd-mobile'
 import {sendMsg} from '../../redux/actions'
 
 const Item = List.Item
@@ -8,7 +8,26 @@ const Item = List.Item
 export class Chat extends Component {
 
 	state = {
-		content: ''
+		content: '',
+		isShowEmojis: false
+	}
+
+	componentWillMount() {
+		const emojis = [
+			'😀', '😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣','😀',
+			'😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣', '🤣','😀',
+			'😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣', '🤣','😀',
+			'😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣','😀', '😁', '🤣', '🤣','😀'
+		]
+		this.emojis = emojis.map(e => ({text: e}))
+	}
+
+	componentDidMount() {
+		window.scrollTo(0, document.body.scrollHeight)
+	}
+
+	componentDidUpdate() {
+		window.scrollTo(0, document.body.scrollHeight)
 	}
 
 	handleClick = () => {
@@ -19,8 +38,22 @@ export class Chat extends Component {
 			this.props.sendMsg({from, to, content})
 		}
 		this.setState({
-			content: ''
+			content: '',
+			isShowEmojis: false
 		})
+	}
+
+	handleToggleEmojis = () => {
+		const isShowEmojis = !this.state.isShowEmojis
+		this.setState({
+			isShowEmojis: isShowEmojis
+		})
+		if (isShowEmojis) {
+			// 异步手动派发resize事件, 解决表情列表显示的bug
+			setTimeout(() => {
+				window.dispatchEvent(new Event('resize'))
+			}, 0)
+		}
 	}
 
 	render() {
@@ -38,8 +71,14 @@ export class Chat extends Component {
 
 		return (
 			<div id='chat-page'>
-				<NavBar>name</NavBar>
-				<List>
+				<NavBar 
+					className='stick-top'
+					icon={<Icon type='left' />}
+					onLeftClick={() => this.props.history.goBack()}
+				>
+					{users[targetId].username}
+				</NavBar>
+				<List style={{marginTop: 45, marginBottom: 50}}>
 					{
 						currentChatMsgs.map(currentChatMsg => {
 							if (targetId === currentChatMsg.from) {
@@ -68,13 +107,35 @@ export class Chat extends Component {
 				<div className='am-tab-bar'>
 					<InputItem 
 						placeholder='请输入'
-						extra={<span>发送</span>}
-						onExtraClick={this.handleClick}
+						extra={
+							<React.Fragment>
+								<span 
+									role="img" 
+									aria-label="emoji-lists" 
+									style={{marginRight: '5px'}}
+									onClick={this.handleToggleEmojis}
+								>
+									😊
+								</span>
+								<span onClick={this.handleClick}>发送</span>
+							</React.Fragment>
+						}
 						value={this.state.content}
 						onChange={val => this.setState({content: val})}
+						onFocus={() => this.setState({isShowEmojis: false})}
 					/>
+					{
+						this.state.isShowEmojis ? (
+							<Grid
+								data={this.emojis}
+								onClick={item => this.setState({content: this.state.content + item.text})}
+								columnNum={8}
+								isCarousel={true}
+								carouselMaxRow={4}
+							/>
+						) : null
+					}
 				</div>
-				
 			</div>
 		)
 	}
