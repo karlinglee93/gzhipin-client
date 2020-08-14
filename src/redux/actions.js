@@ -19,7 +19,7 @@ import {
 	RECEIVE_MSG
 } from './action-types'
 
-const initIO = (dispatch, user_id) => {
+const initIO = () => {
 	/**
 	 * 单例对象
 	 * 1) 创建对象之前: 判断对象是否存在, 只有不存在时才进行创建
@@ -29,9 +29,6 @@ const initIO = (dispatch, user_id) => {
 		io.socket = io('ws://localhost:4001')
 		io.socket.on('receiveMsg', chatMsg => {
 			console.log('客户端接收消息: ', chatMsg)
-			if (user_id === chatMsg.to || user_id === chatMsg.from) {
-				dispatch(receiveMsg(chatMsg))
-			}
 		})
 	}
 }
@@ -47,13 +44,11 @@ export const resetUser = (msg) => ({type: RESET_USER, data: msg})
 // Receive user list - sync action
 const receiveUserlist = (userlist) => ({type: RECEIVE_USER_LIST, data: userlist})
 const receiveMsgList = ({users, chatMsgs}) => ({type: RECEIVE_MSG_LIST, data: {users, chatMsgs}})
-const receiveMsg = (chatMsg) => ({type: RECEIVE_MSG, data: {chatMsg}})
 
-const getMsgList = async (dispatch, user_id) => {
-	initIO(dispatch, user_id)
+const getMsgList = async (dispatch) => {
+	initIO()
 
 	const response = await reqMsgList()
-	debugger
 	const result = response.data
 	
 	if (result.code === 0) {
@@ -83,7 +78,7 @@ export const register = (user) => {
 		const response = await reqRegister({username, password, type})
 		const result = response.data
 		if (result.code === 0) {
-			getMsgList(dispatch, user._id)
+			getMsgList(dispatch)
 			dispatch(authSuccess(result.data))
 		} else {
 			dispatch(errMsg(result.msg))
@@ -102,7 +97,7 @@ export const login = (user) => {
 		const response = await reqLogin(user)
 		const result = response.data
 		if (result.code === 0) {
-			getMsgList(dispatch, user._id)
+			getMsgList(dispatch)
 			dispatch(authSuccess(result.data))
 		} else {
 			dispatch(errMsg(result.msg))
@@ -129,7 +124,7 @@ export const getUser = () => {
 		const response = await reqUser()
 		const result = response.data
 		if (result.code === 0) {
-			getMsgList(dispatch, result.data._id)
+			getMsgList(dispatch)
 			dispatch(receiveUser(result.data))
 		} else {
 			dispatch(resetUser(result.msg))
