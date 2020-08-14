@@ -150,7 +150,7 @@ export const getUserlist = (type) => {
 }
 
 export const sendMsg = ({from, to, content}) => {
-	return dispatch => {
+	return async dispatch => {
 		io.socket.emit('sendMsg', {from, to, content})
 		console.log('客户端发送消息: ', {from, to, content})
 	}
