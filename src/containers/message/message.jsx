@@ -29,10 +29,6 @@ export class Message extends Component {
 		return lastMsgs
 	}
 
-	handleClick(targetId) {
-		this.props.history.push(`/chat/${targetId}`)
-	}
-
 	render() {
 		const {user} = this.props
 		const {users, chatMsgs} = this.props.msglist
@@ -54,7 +50,7 @@ export class Message extends Component {
 								thumb={require(`../../assets/images/headers/${targetHeader}.png`)}
 								extra={<Badge text={3}/>}
 								multipleLine
-								onClick={() => this.handleClick(targetId)}
+								onClick={() => this.props.history.push(`/chat/${targetId}`)}
 							>
 								{lastMsg.content}
 								<Brief>{targetName}</Brief>
