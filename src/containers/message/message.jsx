@@ -7,45 +7,61 @@ const {Brief} = Item
 
 export class Message extends Component {
 
-	getLastMsgs = (myId, users, chatMsgs) => {
-		const lastMsgs = []
-		const lastMsg = {}
-		// debugger
+	getLastMsgs = (chatMsgs) => {
+		const lastMsgObjs = {}
 		chatMsgs.forEach(chatMsg => {
-			if (!lastMsg[chatMsg.chat_id]) {
-				const targetId = (myId === chatMsg.from) ? chatMsg.to : chatMsg.from
-				lastMsg[chatMsg.chat_id] = chatMsg
-				lastMsg[chatMsg.chat_id].username = users[targetId].username
-				lastMsg[chatMsg.chat_id].header = users[targetId].header
+			const {chat_id, create_time} = chatMsg
+			if (!lastMsgObjs[chat_id]) {
+				lastMsgObjs[chat_id] = chatMsg
 			} else {
-				if (lastMsg[chatMsg.chat_id].create_time < chatMsg.create_time) {
-					lastMsg[chatMsg.chat_id] = chatMsg
+				if (lastMsgObjs[chat_id].create_time < create_time) {
+					lastMsgObjs[chat_id] = chatMsg
 				}
 			}
 		})
-		console.log('lastMsg', lastMsg)
+
+		const lastMsgs = Object.values(lastMsgObjs)
+		lastMsgs.sort((lm1, lm2) => {
+			// return结果小于0时, m1在前
+			return lm2.create_time - lm1.create_time
+		})
 
 		return lastMsgs
+	}
+
+	handleClick(targetId) {
+		this.props.history.push(`/chat/${targetId}`)
 	}
 
 	render() {
 		const {user} = this.props
 		const {users, chatMsgs} = this.props.msglist
+		const lastMsgs = this.getLastMsgs(chatMsgs)
 		const myId = user._id
-		const lastMsgs = this.getLastMsgs(myId, users, chatMsgs)
 
 		return (
 			<List style={{marginTop: 45, marginBottom: 50}}>
-				<Item
-					arrow="horizontal"
-					thumb={require('../../assets/images/headers/头像1.png')}
-					extra={<Badge text={3}/>}
-					multipleLine
-					onClick={() => {}}
-				>
-					{'Last msg'}
-					<Brief>{'username'}</Brief>
-				</Item>
+				{
+					lastMsgs.map(lastMsg => {
+						const targetId = (myId === lastMsg.from) ? lastMsg.to : lastMsg.from
+						const targetName = users[targetId].username
+						const targetHeader = users[targetId].header
+
+						return (
+							<Item
+								key={lastMsg._id}
+								arrow="horizontal"
+								thumb={require(`../../assets/images/headers/${targetHeader}.png`)}
+								extra={<Badge text={3}/>}
+								multipleLine
+								onClick={() => this.handleClick(targetId)}
+							>
+								{lastMsg.content}
+								<Brief>{targetName}</Brief>
+							</Item>
+						)
+					})
+				}
 			</List>
 		)
 	}
