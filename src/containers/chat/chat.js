@@ -108,7 +108,7 @@ export class Chat extends Component {
 					<InputItem 
 						placeholder='请输入'
 						extra={
-							<React.Fragment>
+							<>
 								<span 
 									role="img" 
 									aria-label="emoji-lists" 
@@ -118,7 +118,7 @@ export class Chat extends Component {
 									😊
 								</span>
 								<span onClick={this.handleClick}>发送</span>
-							</React.Fragment>
+							</>
 						}
 						value={this.state.content}
 						onChange={val => this.setState({content: val})}
