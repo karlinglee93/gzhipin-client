@@ -7,7 +7,8 @@ const {Item} = TabBar
 
 class NavFooter extends Component {
 	static propTypes = {
-		navList: PropTypes.array.isRequired
+		navList: PropTypes.array.isRequired,
+		unreadMsgCount: PropTypes.number.isRequired
 	}
 
 	render() {
@@ -25,6 +26,7 @@ class NavFooter extends Component {
 							selectedIcon={{uri: require(`./images/${nav.icon}-selected.png`)}}
 							selected={pathname === nav.path}
 							onPress={() => this.props.history.replace(nav.path)}
+							badge={nav.path === '/message' ? this.props.unreadMsgCount : 0}
 						/>
 					))
 				}

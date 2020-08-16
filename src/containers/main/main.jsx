@@ -68,7 +68,7 @@ class Main extends Component {
 			return <Redirect to='/login'/>
 		}
 		// 如果有, 则读取redux中的user状态
-		const {user} = this.props
+		const {user, unreadMsgCount} = this.props
 		// 如果user状态中没有_id, 返回null(不做任何显示)
 		if (!user._id) {
 			return null
@@ -106,14 +106,14 @@ class Main extends Component {
 					<Route path='/chat/:user_id' component={Chat} />
 					<Route component={NotFound} />
 				</Switch>
-				{curNav ? <NavFooter navList={navList} /> : null}
+				{curNav ? <NavFooter navList={navList} unreadMsgCount={unreadMsgCount} /> : null}
 			</div>
 		)
 	}
 }
 
 export default connect(
-	state => ({user: state.user}),
+	state => ({user: state.user, unreadMsgCount: state.msglist.unreadMsgCount}),
 	{getUser}
 )(Main)
 

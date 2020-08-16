@@ -13,19 +13,19 @@ export class Message extends Component {
 			const {chat_id, create_time} = chatMsg
 
 			if (chatMsg.to === myId && !chatMsg.read) {
-				chatMsg.unReadCount = 1
+				chatMsg.unreadMsgCount = 1
 			} else {
-				chatMsg.unReadCount = 0
+				chatMsg.unreadMsgCount = 0
 			}
 
 			if (!lastMsgObjs[chat_id]) {
 				lastMsgObjs[chat_id] = chatMsg
 			} else {
-				const unReadCount = chatMsg.unReadCount + lastMsgObjs[chat_id].unReadCount
+				const unreadMsgCount = chatMsg.unreadMsgCount + lastMsgObjs[chat_id].unreadMsgCount
 				if (lastMsgObjs[chat_id].create_time < create_time) {
 					lastMsgObjs[chat_id] = chatMsg
 				}
-				lastMsgObjs[chat_id].unReadCount = unReadCount
+				lastMsgObjs[chat_id].unreadMsgCount = unreadMsgCount
 			}
 		})
 
@@ -57,7 +57,7 @@ export class Message extends Component {
 								key={lastMsg._id}
 								arrow="horizontal"
 								thumb={require(`../../assets/images/headers/${targetHeader}.png`)}
-								extra={<Badge text={lastMsg.unReadCount}/>}
+								extra={<Badge text={lastMsg.unreadMsgCount}/>}
 								multipleLine
 								onClick={() => this.props.history.push(`/chat/${targetId}`)}
 							>

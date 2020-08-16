@@ -30,7 +30,7 @@ const initIO = (dispatch, user_id) => {
 		io.socket.on('receiveMsg', chatMsg => {
 			console.log('客户端接收消息: ', chatMsg)
 			if (user_id === chatMsg.to || user_id === chatMsg.from) {
-				dispatch(receiveMsg(chatMsg))
+				dispatch(receiveMsg(chatMsg, user_id))
 			}
 		})
 	}
@@ -46,8 +46,8 @@ const receiveUser = (user) => ({type: RECEIVE_USER, data: user})
 export const resetUser = (msg) => ({type: RESET_USER, data: msg})
 // Receive user list - sync action
 const receiveUserlist = (userlist) => ({type: RECEIVE_USER_LIST, data: userlist})
-const receiveMsgList = ({users, chatMsgs}) => ({type: RECEIVE_MSG_LIST, data: {users, chatMsgs}})
-const receiveMsg = (chatMsg) => ({type: RECEIVE_MSG, data: chatMsg})
+const receiveMsgList = ({users, chatMsgs, myId}) => ({type: RECEIVE_MSG_LIST, data: {users, chatMsgs, myId}})
+const receiveMsg = (chatMsg, myId) => ({type: RECEIVE_MSG, data: {chatMsg, myId}})
 
 const getMsgList = async (dispatch, user_id) => {
 	initIO(dispatch, user_id)
@@ -57,7 +57,7 @@ const getMsgList = async (dispatch, user_id) => {
 	
 	if (result.code === 0) {
 		const {users, chatMsgs} = result.data
-		dispatch(receiveMsgList({users, chatMsgs}))
+		dispatch(receiveMsgList({users, chatMsgs, user_id}))
 	}
 }
 
