@@ -7,16 +7,25 @@ const {Brief} = Item
 
 export class Message extends Component {
 
-	getLastMsgs = (chatMsgs) => {
+	getLastMsgs = (chatMsgs, myId) => {
 		const lastMsgObjs = {}
 		chatMsgs.forEach(chatMsg => {
 			const {chat_id, create_time} = chatMsg
+
+			if (chatMsg.to === myId && !chatMsg.read) {
+				chatMsg.unReadCount = 1
+			} else {
+				chatMsg.unReadCount = 0
+			}
+
 			if (!lastMsgObjs[chat_id]) {
 				lastMsgObjs[chat_id] = chatMsg
 			} else {
+				const unReadCount = chatMsg.unReadCount + lastMsgObjs[chat_id].unReadCount
 				if (lastMsgObjs[chat_id].create_time < create_time) {
 					lastMsgObjs[chat_id] = chatMsg
 				}
+				lastMsgObjs[chat_id].unReadCount = unReadCount
 			}
 		})
 
@@ -32,7 +41,7 @@ export class Message extends Component {
 	render() {
 		const {user} = this.props
 		const {users, chatMsgs} = this.props.msglist
-		const lastMsgs = this.getLastMsgs(chatMsgs)
+		const lastMsgs = this.getLastMsgs(chatMsgs, user._id)
 		const myId = user._id
 
 		return (
@@ -48,7 +57,7 @@ export class Message extends Component {
 								key={lastMsg._id}
 								arrow="horizontal"
 								thumb={require(`../../assets/images/headers/${targetHeader}.png`)}
-								extra={<Badge text={3}/>}
+								extra={<Badge text={lastMsg.unReadCount}/>}
 								multipleLine
 								onClick={() => this.props.history.push(`/chat/${targetId}`)}
 							>
