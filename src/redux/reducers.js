@@ -64,7 +64,7 @@ const msglist = (state=initMsgList, action) => {
 			return {
 				users: state.users,
 				chatMsgs: [...state.chatMsgs, chatMsg],
-				unreadMsgCount: state.chatMsgs.unreadMsgCount + ((myId === chatMsg.to) ? !chatMsg.read : 0)
+				unreadMsgCount: state.unreadMsgCount + ((action.data.myId === chatMsg.to) ? !chatMsg.read : 0)
 			}
 		default:
 			return state

@@ -46,18 +46,18 @@ const receiveUser = (user) => ({type: RECEIVE_USER, data: user})
 export const resetUser = (msg) => ({type: RESET_USER, data: msg})
 // Receive user list - sync action
 const receiveUserlist = (userlist) => ({type: RECEIVE_USER_LIST, data: userlist})
-const receiveMsgList = ({users, chatMsgs, myId}) => ({type: RECEIVE_MSG_LIST, data: {users, chatMsgs, myId}})
+const receiveMsgList = (users, chatMsgs, myId) => ({type: RECEIVE_MSG_LIST, data: {users, chatMsgs, myId}})
 const receiveMsg = (chatMsg, myId) => ({type: RECEIVE_MSG, data: {chatMsg, myId}})
 
 const getMsgList = async (dispatch, user_id) => {
 	initIO(dispatch, user_id)
-
+	
 	const response = await reqMsgList()
 	const result = response.data
 	
 	if (result.code === 0) {
 		const {users, chatMsgs} = result.data
-		dispatch(receiveMsgList({users, chatMsgs, user_id}))
+		dispatch(receiveMsgList(users, chatMsgs, user_id))
 	}
 }
 
