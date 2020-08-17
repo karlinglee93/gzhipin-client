@@ -7,7 +7,8 @@ import {
 	RESET_USER,
 	RECEIVE_USER_LIST,
 	RECEIVE_MSG_LIST,
-	RECEIVE_MSG
+	RECEIVE_MSG,
+	READ_CHAT
 } from './action-types'
 import {getRedirectTo} from '../utils/index'
 
@@ -65,6 +66,19 @@ const msglist = (state=initMsgList, action) => {
 				users: state.users,
 				chatMsgs: [...state.chatMsgs, chatMsg],
 				unreadMsgCount: state.unreadMsgCount + ((action.data.myId === chatMsg.to) ? !chatMsg.read : 0)
+			}
+		case READ_CHAT:
+			const {from, to, count} = action.data
+			return {
+				users: state.users,
+				chatMsgs: state.chatMsgs.map(msg => {
+					if (msg.from === from && msg.to === to && !msg.read) {
+						return {...msg, read: true}
+					} else {
+						return state.chatMsgs
+					}
+				}),
+				unreadMsgCount: state.unreadMsgCount - count
 			}
 		default:
 			return state

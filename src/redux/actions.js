@@ -7,7 +7,7 @@ import {
 	reqUser,
 	reqUserList,
 	reqMsgList,
-	// reqReadMsg
+	reqReadMsg
 } from '../api/index'
 import {
 	AUTH_SUCCESS, 
@@ -16,7 +16,8 @@ import {
 	RESET_USER,
 	RECEIVE_USER_LIST,
 	RECEIVE_MSG_LIST,
-	RECEIVE_MSG
+	RECEIVE_MSG,
+	READ_CHAT
 } from './action-types'
 
 const initIO = (dispatch, user_id) => {
@@ -48,10 +49,11 @@ export const resetUser = (msg) => ({type: RESET_USER, data: msg})
 const receiveUserlist = (userlist) => ({type: RECEIVE_USER_LIST, data: userlist})
 const receiveMsgList = (users, chatMsgs, myId) => ({type: RECEIVE_MSG_LIST, data: {users, chatMsgs, myId}})
 const receiveMsg = (chatMsg, myId) => ({type: RECEIVE_MSG, data: {chatMsg, myId}})
+const receiveReadChat = (from, to, count) => ({type: READ_CHAT, data: {from, to, count}})
 
 const getMsgList = async (dispatch, user_id) => {
 	initIO(dispatch, user_id)
-	
+
 	const response = await reqMsgList()
 	const result = response.data
 	
@@ -153,5 +155,15 @@ export const sendMsg = ({from, to, content}) => {
 	return async dispatch => {
 		io.socket.emit('sendMsg', {from, to, content})
 		console.log('客户端发送消息: ', {from, to, content})
+	}
+}
+
+export const readChat = (from, to) => {
+	return async dispatch => {
+		const response = await reqReadMsg()
+		const result = response.data
+		if (result.code === 0) {
+			dispatch(receiveReadChat(from, to, result.data))
+		}
 	}
 }

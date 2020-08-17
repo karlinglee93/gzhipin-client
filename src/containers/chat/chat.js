@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {NavBar, List, InputItem, Grid, Icon} from 'antd-mobile'
-import {sendMsg} from '../../redux/actions'
+import {sendMsg, readChat} from '../../redux/actions'
 
 const Item = List.Item
 
@@ -24,6 +24,10 @@ export class Chat extends Component {
 
 	componentDidMount() {
 		window.scrollTo(0, document.body.scrollHeight)
+
+		const from = this.props.match.params.user_id
+		const to = this.props.user._id
+		this.props.readChat(from, to)
 	}
 
 	componentDidUpdate() {
@@ -147,7 +151,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = {
-	sendMsg
+	sendMsg, readChat
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Chat)

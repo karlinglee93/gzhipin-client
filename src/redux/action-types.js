@@ -5,3 +5,4 @@ export const RESET_USER = 'RESET_USER' // reset user
 export const RECEIVE_USER_LIST = 'RECEIVE_USER_LIST' // receive user list
 export const RECEIVE_MSG_LIST = 'RECEIVE_MSG_LIST'
 export const RECEIVE_MSG = 'RECEIVE_MSG'
+export const READ_CHAT = 'READ_CHAT'
