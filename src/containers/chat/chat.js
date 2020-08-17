@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {NavBar, List, InputItem, Grid, Icon} from 'antd-mobile'
+import QueueAnim from 'rc-queue-anim'
+
 import {sendMsg, readChat} from '../../redux/actions'
 
 const Item = List.Item
@@ -85,30 +87,32 @@ export class Chat extends Component {
 					{users[targetId].username}
 				</NavBar>
 				<List style={{marginTop: 45, marginBottom: 50}}>
-					{
-						currentChatMsgs.map(currentChatMsg => {
-							if (targetId === currentChatMsg.from) {
-								return (
-									<Item
-										key={currentChatMsg._id}
-										thumb={targetIcon}
-									>
-										{currentChatMsg.content}
-									</Item>
-								)
-							} else {
-								return (
-									<Item
-										key={currentChatMsg._id}
-										className='chat-me'
-										extra='我'
-									>
-										{currentChatMsg.content}
-									</Item>
-								) 
-							}
-						})
-					}
+					<QueueAnim type='left'>
+						{
+							currentChatMsgs.map(currentChatMsg => {
+								if (targetId === currentChatMsg.from) {
+									return (
+										<Item
+											key={currentChatMsg._id}
+											thumb={targetIcon}
+										>
+											{currentChatMsg.content}
+										</Item>
+									)
+								} else {
+									return (
+										<Item
+											key={currentChatMsg._id}
+											className='chat-me'
+											extra='我'
+										>
+											{currentChatMsg.content}
+										</Item>
+									) 
+								}
+							})
+						}
+					</QueueAnim>
 				</List>
 				<div className='am-tab-bar'>
 					<InputItem 

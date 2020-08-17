@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {List, Badge} from 'antd-mobile'
+import QueueAnim from 'rc-queue-anim'
 
 const {Item} = List
 const {Brief} = Item
@@ -46,27 +47,29 @@ export class Message extends Component {
 
 		return (
 			<List style={{marginTop: 45, marginBottom: 50}}>
-				{
-					lastMsgs.map(lastMsg => {
-						const targetId = (myId === lastMsg.from) ? lastMsg.to : lastMsg.from
-						const targetName = users[targetId].username
-						const targetHeader = users[targetId].header
+				<QueueAnim type='scale'>
+					{
+						lastMsgs.map(lastMsg => {
+							const targetId = (myId === lastMsg.from) ? lastMsg.to : lastMsg.from
+							const targetName = users[targetId].username
+							const targetHeader = users[targetId].header
 
-						return (
-							<Item
-								key={lastMsg._id}
-								arrow="horizontal"
-								thumb={require(`../../assets/images/headers/${targetHeader}.png`)}
-								extra={<Badge text={lastMsg.unreadMsgCount}/>}
-								multipleLine
-								onClick={() => this.props.history.push(`/chat/${targetId}`)}
-							>
-								{lastMsg.content}
-								<Brief>{targetName}</Brief>
-							</Item>
-						)
-					})
-				}
+							return (
+								<Item
+									key={lastMsg._id}
+									arrow="horizontal"
+									thumb={require(`../../assets/images/headers/${targetHeader}.png`)}
+									extra={<Badge text={lastMsg.unreadMsgCount}/>}
+									multipleLine
+									onClick={() => this.props.history.push(`/chat/${targetId}`)}
+								>
+									{lastMsg.content}
+									<Brief>{targetName}</Brief>
+								</Item>
+							)
+						})
+					}
+				</QueueAnim>
 			</List>
 		)
 	}
