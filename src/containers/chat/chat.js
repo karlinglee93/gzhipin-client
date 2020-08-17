@@ -24,7 +24,9 @@ export class Chat extends Component {
 
 	componentDidMount() {
 		window.scrollTo(0, document.body.scrollHeight)
+	}
 
+	componentWillUnmount() {
 		const from = this.props.match.params.user_id
 		const to = this.props.user._id
 		this.props.readChat(from, to)

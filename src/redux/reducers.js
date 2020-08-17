@@ -75,7 +75,7 @@ const msglist = (state=initMsgList, action) => {
 					if (msg.from === from && msg.to === to && !msg.read) {
 						return {...msg, read: true}
 					} else {
-						return state.chatMsgs
+						return msg
 					}
 				}),
 				unreadMsgCount: state.unreadMsgCount - count

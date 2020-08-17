@@ -160,7 +160,7 @@ export const sendMsg = ({from, to, content}) => {
 
 export const readChat = (from, to) => {
 	return async dispatch => {
-		const response = await reqReadMsg()
+		const response = await reqReadMsg(from)
 		const result = response.data
 		if (result.code === 0) {
 			dispatch(receiveReadChat(from, to, result.data))
